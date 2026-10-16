@@ -142,6 +142,7 @@ function renderEditor() {
   const accepted = state.edits[index];
   const count = state.edits.filter(Boolean).length;
   const sheet = $('#revision-sheet');
+  sheet.dataset.clause = index;
   revealAnimation?.cancel();
   revealAnimation = null;
   sheet.setAttribute('aria-labelledby', `tab-${index}`);
