@@ -1,4 +1,5 @@
-import { cp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { cp, mkdir, rm, writeFile, readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -6,5 +7,10 @@ const output = join(root, 'dist');
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
 for (const name of ['index.html', 'styles.css', 'app.js', 'content.mjs', 'state.mjs', 'assets', 'qa.html']) await cp(join(root, name), join(output, name), { recursive: true });
+const sources = await Promise.all(['app.js', 'styles.css', 'content.mjs', 'state.mjs'].map(name => readFile(join(root, name), 'utf8')));
+const revision = createHash('sha256').update(sources.join('\n')).digest('hex').slice(0, 12);
+const html = await readFile(join(output, 'index.html'), 'utf8');
+await writeFile(join(output, 'index.html'), html.replace('./styles.css', `./styles.css?v=${revision}`).replace('./app.js', `./app.js?v=${revision}`));
+await writeFile(join(output, 'app.js'), sources[0].replace("'./content.mjs'", `'./content.mjs?v=${revision}'`).replace("'./state.mjs'", `'./state.mjs?v=${revision}'`));
 await writeFile(join(output, '.nojekyll'), '');
 console.log('Built dist/ · static, dependency-free, relative resource paths.');
