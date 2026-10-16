@@ -39,3 +39,4 @@ html[data-motion=reduce]{scroll-behavior:auto}html[data-motion=reduce] *,html[da
 @media print{.masthead,.invitation,.draft,.revision,.beginning-line,.site-footer,.storage-note{display:none!important}body{background:white;color:#17212f}.welcome{display:block!important;padding:0}.welcome-title{display:none}.welcome-letter{box-shadow:none;transform:none!important;max-width:700px;margin:0 auto}.welcome-letter *{animation:none!important}}
 
 @media(max-width:767px){.revision-sheet[data-clause="1"]{min-height:400px}}
+@media(max-width:767px) and (max-height:740px){.folio-stage{margin-bottom:30px}.invitation-dedication{display:none}}
