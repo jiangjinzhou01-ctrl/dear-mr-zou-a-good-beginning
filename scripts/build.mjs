@@ -1,0 +1,10 @@
+import { cp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
+const root = fileURLToPath(new URL('../', import.meta.url));
+const output = join(root, 'dist');
+await rm(output, { recursive: true, force: true });
+await mkdir(output, { recursive: true });
+for (const name of ['index.html', 'styles.css', 'app.js', 'content.mjs', 'state.mjs', 'assets', 'qa.html']) await cp(join(root, name), join(output, name), { recursive: true });
+await writeFile(join(output, '.nojekyll'), '');
+console.log('Built dist/ · static, dependency-free, relative resource paths.');
